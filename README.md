@@ -8,6 +8,8 @@
 
 <p align="center">
   <strong>An AI-native methodology for living requirements — one atom, one file, one unit of knowledge.</strong>
+  <br/>
+  <a href="https://dab512.github.io/atomic-spec/">dab512.github.io/atomic-spec</a>
 </p>
 
 Atomic Spec is an **AI-native** methodology that unifies **Domain-Driven Design**, **Test-Driven Development**, **Use-Case-Driven**, and **Requirements-Driven** approaches into a single flow orchestrated by AI agents. Every requirement is a living artifact with history, not a frozen document.

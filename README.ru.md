@@ -8,6 +8,8 @@
 
 <p align="center">
   <strong>AI-native методология живых требований — один атом, один файл, одна единица знания.</strong>
+  <br/>
+  <a href="https://dab512.github.io/atomic-spec/ru.html">dab512.github.io/atomic-spec</a>
 </p>
 
 Atomic Spec — это **AI-native** методология, которая объединяет **Domain-Driven Design**, **Test-Driven Development**, **Use-Case-Driven** и **Requirements-Driven** подходы в единый поток, оркестрируемый AI-агентами. Каждое требование — живой артефакт с историей, а не замороженный документ.
