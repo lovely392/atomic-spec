@@ -1,7 +1,9 @@
 [English](README.md) | **Русский**
 
 <p align="center">
-  <img src="assets/logo.svg" alt="Atomic Spec" width="480"/>
+  <a href="https://dab512.github.io/atomic-spec/ru.html">
+    <img src="assets/logo.svg" alt="Atomic Spec" width="480"/>
+  </a>
 </p>
 
 <p align="center">
