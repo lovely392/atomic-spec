@@ -1,33 +1,35 @@
-# Анатомия атома
+**English** | [Русский](ru/atom-anatomy.md)
 
-Атом — минимальная неделимая единица спецификации в методологии Atomic Spec. Каждый атом — это один Markdown-файл с YAML frontmatter и набором секций.
+# Atom Anatomy
+
+An atom is the minimal indivisible unit of specification in the Atomic Spec methodology. Each atom is a single Markdown file with YAML frontmatter and a set of sections.
 
 ## YAML Frontmatter
 
-Frontmatter содержит метаданные атома. Все поля обязательны, если не указано иное.
+The frontmatter contains atom metadata. All fields are required unless stated otherwise.
 
 ```yaml
 ---
 id: SPEC-042
 type: feature
-title: "Отмена заказа покупателем"
+title: "Order cancellation by buyer"
 parent: SPEC-040
 children: [SPEC-043, SPEC-044]
 supersedes: null
 see-also: [SPEC-010, SPEC-035]
 emits: [order.cancelled, refund.initiated]
 consumes: [order.placed, payment.completed]
-actors: [Покупатель, Система, Платёжный шлюз]
+actors: [Buyer, System, Payment Gateway]
 tags: [orders, cancellation, refund]
 open-questions:
   - id: OQ-001
-    question: "Нужно ли уведомлять курьера при отмене?"
+    question: "Should the courier be notified on cancellation?"
     status: open
     resolution: null
   - id: OQ-002
-    question: "Какой таймаут на возврат средств?"
+    question: "What is the timeout for refund processing?"
     status: closed
-    resolution: "72 часа согласно SLA платёжного провайдера"
+    resolution: "72 hours per payment provider SLA"
 status: draft
 implementation: none
 verification: none
@@ -40,197 +42,197 @@ updated: 2025-11-20
 ---
 ```
 
-### Описание полей
+### Field Descriptions
 
-#### Идентификация
+#### Identification
 
-| Поле         | Тип      | Описание                                                                 |
+| Field       | Type     | Description                                                              |
 |-------------|----------|--------------------------------------------------------------------------|
-| `id`        | string   | Уникальный идентификатор атома. Формат: `SPEC-NNN` или `DOMAIN-NNN`.    |
-| `type`      | enum     | Тип атома: `feature`, `rule`, `constraint`, `event`, `model`.            |
-| `title`     | string   | Краткое название на языке бизнеса. Без технического жаргона.             |
+| `id`        | string   | Unique atom identifier. Format: `SPEC-NNN` or `DOMAIN-NNN`.             |
+| `type`      | enum     | Atom type: `feature`, `rule`, `constraint`, `event`, `model`.            |
+| `title`     | string   | Short name in business language. No technical jargon.                    |
 
-#### Иерархия и связи
+#### Hierarchy and Relationships
 
-| Поле         | Тип      | Описание                                                                 |
+| Field        | Type     | Description                                                              |
 |-------------|----------|--------------------------------------------------------------------------|
-| `parent`    | string?  | ID родительского атома. `null` для корневых атомов.                      |
-| `children`  | string[] | Список ID дочерних атомов. Пустой список, если нет потомков.             |
-| `supersedes`| string?  | ID атома, который данный атом заменяет. `null`, если это новый атом.     |
-| `see-also`  | string[] | Ссылки на связанные атомы (не иерархические). Для навигации и контекста. |
+| `parent`    | string?  | ID of the parent atom. `null` for root atoms.                            |
+| `children`  | string[] | List of child atom IDs. Empty list if there are no children.             |
+| `supersedes`| string?  | ID of the atom that this atom replaces. `null` if this is a new atom.    |
+| `see-also`  | string[] | References to related atoms (non-hierarchical). For navigation and context. |
 
-#### События
+#### Events
 
-| Поле       | Тип      | Описание                                                                  |
+| Field     | Type     | Description                                                               |
 |-----------|----------|---------------------------------------------------------------------------|
-| `emits`   | string[] | Доменные события, которые порождает этот атом (например, `order.cancelled`). |
-| `consumes`| string[] | Доменные события, на которые реагирует этот атом (например, `order.placed`). |
+| `emits`   | string[] | Domain events produced by this atom (e.g., `order.cancelled`).            |
+| `consumes`| string[] | Domain events this atom reacts to (e.g., `order.placed`).                 |
 
-#### Участники
+#### Participants
 
-| Поле     | Тип      | Описание                                                                    |
-|---------|----------|-----------------------------------------------------------------------------|
-| `actors`| string[] | Акторы, участвующие в сценарии. Должны совпадать с акторами в AC.           |
-| `tags`  | string[] | Теги для поиска и группировки. Произвольные строки.                         |
+| Field    | Type     | Description                                                                 |
+|----------|----------|-----------------------------------------------------------------------------|
+| `actors` | string[] | Actors involved in the scenario. Must match actors in the AC.               |
+| `tags`   | string[] | Tags for search and grouping. Arbitrary strings.                            |
 
-#### Открытые вопросы
+#### Open Questions
 
-| Поле                         | Тип    | Описание                                                        |
-|------------------------------|--------|-----------------------------------------------------------------|
-| `open-questions[].id`        | string | Уникальный ID вопроса в рамках атома (например, `OQ-001`).     |
-| `open-questions[].question`  | string | Формулировка вопроса.                                           |
-| `open-questions[].status`    | enum   | `open` или `closed`.                                            |
-| `open-questions[].resolution`| string?| Ответ на вопрос. `null`, пока вопрос открыт.                   |
+| Field                          | Type   | Description                                                     |
+|--------------------------------|--------|-----------------------------------------------------------------|
+| `open-questions[].id`         | string | Unique question ID within the atom (e.g., `OQ-001`).           |
+| `open-questions[].question`   | string | Question text.                                                  |
+| `open-questions[].status`     | enum   | `open` or `closed`.                                             |
+| `open-questions[].resolution` | string?| Answer to the question. `null` while the question is open.      |
 
-#### Три оси статуса
+#### Three Status Axes
 
-| Поле             | Тип  | Значения                                          | Описание                      |
+| Field            | Type | Values                                            | Description                   |
 |-----------------|------|---------------------------------------------------|-------------------------------|
-| `status`        | enum | `draft`, `active`, `deprecated`                   | Семантический статус атома    |
-| `implementation`| enum | `none`, `in-progress`, `done`                     | Статус реализации             |
-| `verification`  | enum | `none`, `in-progress`, `passed`, `failed`         | Статус верификации            |
+| `status`        | enum | `draft`, `active`, `deprecated`                   | Semantic status of the atom   |
+| `implementation`| enum | `none`, `in-progress`, `done`                     | Implementation status         |
+| `verification`  | enum | `none`, `in-progress`, `passed`, `failed`         | Verification status           |
 
-Подробнее об осях статуса см. [Методология](methodology.md).
+For more on the status axes see [Methodology](methodology.md).
 
-#### Владельцы и даты
+#### Owners and Dates
 
-| Поле              | Тип    | Описание                                             |
-|------------------|--------|------------------------------------------------------|
-| `owners.analyst` | string | Логин аналитика, ответственного за атом.              |
-| `owners.developer`| string| Логин разработчика.                                   |
-| `owners.tester`  | string | Логин тестировщика.                                   |
-| `created`        | date   | Дата создания атома (YYYY-MM-DD).                     |
-| `updated`        | date   | Дата последнего обновления (YYYY-MM-DD).              |
+| Field             | Type   | Description                                          |
+|-------------------|--------|------------------------------------------------------|
+| `owners.analyst`  | string | Login of the analyst responsible for the atom.        |
+| `owners.developer`| string | Login of the developer.                               |
+| `owners.tester`   | string | Login of the tester.                                  |
+| `created`         | date   | Atom creation date (YYYY-MM-DD).                      |
+| `updated`         | date   | Last update date (YYYY-MM-DD).                        |
 
-## Секции атома
+## Atom Sections
 
-После frontmatter следуют Markdown-секции. Каждая секция принадлежит определённой роли.
+After the frontmatter come Markdown sections. Each section belongs to a specific role.
 
-### Секции Аналитика
+### Analyst Sections
 
-#### Intent (Намерение)
+#### Intent
 
-Суть атома в 1-3 предложениях. Только бизнес-смысл, без технических деталей.
+The essence of the atom in 1-3 sentences. Business meaning only, no technical details.
 
 ```markdown
 ## Intent
 
-Покупатель может отменить заказ в течение 30 минут после оформления,
-если заказ ещё не передан в доставку.
+The buyer can cancel an order within 30 minutes of placing it,
+provided the order has not yet been handed off to delivery.
 ```
 
-**Правило**: если в Intent упоминается база данных, фреймворк, API или эндпоинт — это нарушение.
+**Rule**: if Intent mentions a database, framework, API, or endpoint, that is a violation.
 
-#### Domain Rules (Доменные правила)
+#### Domain Rules
 
-Правила предметной области. Каждое правило имеет уникальный ID и описание последствий нарушения.
+Domain rules. Each rule has a unique ID and a description of the violation consequence.
 
 ```markdown
 ## Domain Rules
 
-- **DR-001**: Отмена возможна только в статусах `placed` и `confirmed`.
-  Нарушение: `ORDER_NOT_CANCELLABLE`.
-- **DR-002**: Окно отмены — 30 минут с момента события `order.placed`.
-  Нарушение: `CANCELLATION_WINDOW_EXPIRED`.
-- **DR-003**: При отмене инициируется возврат средств на исходный способ оплаты.
-  Нарушение: невозможно — системное правило.
+- **DR-001**: Cancellation is only possible in statuses `placed` and `confirmed`.
+  Violation: `ORDER_NOT_CANCELLABLE`.
+- **DR-002**: Cancellation window is 30 minutes from the `order.placed` event.
+  Violation: `CANCELLATION_WINDOW_EXPIRED`.
+- **DR-003**: On cancellation, a refund is initiated to the original payment method.
+  Violation: not applicable — system rule.
 ```
 
-#### Acceptance Criteria (Критерии приёмки)
+#### Acceptance Criteria
 
-Gherkin-сценарии. Технологически нейтральные. Минимум один позитивный и один негативный сценарий.
+Gherkin scenarios. Technology-neutral. At least one positive and one negative scenario.
 
 ```markdown
 ## Acceptance Criteria
 
-**AC-001**: Успешная отмена
-Given заказ в статусе "placed" создан 10 минут назад
-When Покупатель запрашивает отмену
-Then заказ переходит в статус "cancelled"
-And система порождает событие `order.cancelled`
-And инициируется возврат средств
+**AC-001**: Successful cancellation
+Given an order in status "placed" created 10 minutes ago
+When the Buyer requests cancellation
+Then the order transitions to status "cancelled"
+And the system emits an `order.cancelled` event
+And a refund is initiated
 
-**AC-002**: Отмена после истечения окна
-Given заказ создан 40 минут назад
-When Покупатель запрашивает отмену
-Then система отклоняет запрос
-And возвращает ошибку "CANCELLATION_WINDOW_EXPIRED"
+**AC-002**: Cancellation after window expiration
+Given an order created 40 minutes ago
+When the Buyer requests cancellation
+Then the system rejects the request
+And returns error "CANCELLATION_WINDOW_EXPIRED"
 ```
 
 #### Decision Matrix (DMT)
 
-Таблица решений для сложных комбинаций условий.
+A decision table for complex condition combinations.
 
 ```markdown
 ## Decision Matrix (DMT)
 
-| Статус заказа | Время с момента создания | Результат             |
-|---------------|-------------------------|-----------------------|
-| placed        | < 30 мин                | Отмена разрешена       |
-| placed        | >= 30 мин               | Отмена отклонена       |
-| confirmed     | < 30 мин                | Отмена разрешена       |
-| shipped       | любое                   | Отмена отклонена       |
+| Order Status  | Time Since Creation | Result                |
+|---------------|---------------------|-----------------------|
+| placed        | < 30 min            | Cancellation allowed  |
+| placed        | >= 30 min           | Cancellation denied   |
+| confirmed     | < 30 min            | Cancellation allowed  |
+| shipped       | any                 | Cancellation denied   |
 ```
 
-#### Constraints (Ограничения)
+#### Constraints
 
-Нефункциональные требования: производительность, безопасность, идемпотентность.
+Non-functional requirements: performance, security, idempotency.
 
 ```markdown
 ## Constraints
 
-- **PERF**: Операция отмены должна завершаться за < 500ms (p99).
-- **SEC**: Только владелец заказа может его отменить.
-- **IDMP**: Повторный запрос на отмену уже отменённого заказа — идемпотентен (200 OK).
+- **PERF**: The cancellation operation must complete in < 500ms (p99).
+- **SEC**: Only the order owner can cancel the order.
+- **IDMP**: A repeated cancellation request for an already cancelled order is idempotent (200 OK).
 ```
 
-#### Open Questions (Открытые вопросы)
+#### Open Questions
 
-Развёрнутое описание открытых вопросов (дублируется из frontmatter для удобства чтения).
+Expanded description of open questions (duplicated from frontmatter for readability).
 
-#### Decision Log (Журнал решений)
+#### Decision Log
 
-Хронологический лог принятых решений с обоснованием.
+A chronological log of decisions made, with rationale.
 
 ```markdown
 ## Decision Log
 
-- **2025-11-15**: Окно отмены — 30 минут (а не 60). Причина: логистика начинает
-  обработку через 30 минут, после чего отмена несёт дополнительные издержки.
-- **2025-11-18**: Возврат на исходный способ оплаты (а не на баланс). Причина:
-  юридическое требование по ЗоЗПП.
+- **2025-11-15**: Cancellation window set to 30 minutes (not 60). Reason: logistics
+  begins processing after 30 minutes; cancellation after that incurs additional costs.
+- **2025-11-18**: Refund to the original payment method (not to account balance). Reason:
+  legal requirement under consumer protection law.
 ```
 
-### Секции Разработчика
+### Developer Sections
 
-#### Tech Spec (Техническая спецификация)
+#### Tech Spec
 
-API-контракты, схемы данных, миграции.
+API contracts, data schemas, migrations.
 
 ```markdown
 ## Tech Spec
 
-### Изменения модели
+### Model Changes
 
-Добавлено поле `cancelled_at: timestamp?` в таблицу `orders`.
-Миграция: `V042__add_cancelled_at_to_orders.sql`.
+Added field `cancelled_at: timestamp?` to the `orders` table.
+Migration: `V042__add_cancelled_at_to_orders.sql`.
 
-### Зависимости
+### Dependencies
 
-- Сервис `payment-gateway` для инициации возврата.
-- Событие `refund.initiated` публикуется в Kafka topic `payments`.
+- `payment-gateway` service for initiating the refund.
+- `refund.initiated` event is published to the Kafka topic `payments`.
 ```
 
 #### Platform API
 
-Конкретные эндпоинты, тело запроса, ответы с типами.
+Specific endpoints, request body, responses with types.
 
 ```markdown
 ## Platform API
 
 ### POST /api/v1/orders/{orderId}/cancel
 
-**Request Body**: пустое
+**Request Body**: empty
 
 **Response 200**:
 ```json
@@ -258,50 +260,50 @@ API-контракты, схемы данных, миграции.
 ```
 ```
 
-#### Implementation Notes (Заметки по реализации)
+#### Implementation Notes
 
-Компромиссы, зависимости, ограничения, карта файлов.
+Trade-offs, dependencies, limitations, file map.
 
 ```markdown
 ## Implementation Notes
 
-### Карта файлов
-- `src/orders/cancel-order.usecase.ts` — основной use case
-- `src/orders/order.entity.ts` — добавлен метод `cancel()`
-- `migrations/V042__add_cancelled_at.sql` — миграция
+### File Map
+- `src/orders/cancel-order.usecase.ts` — main use case
+- `src/orders/order.entity.ts` — added `cancel()` method
+- `migrations/V042__add_cancelled_at.sql` — migration
 
-### Компромиссы
-- Возврат средств асинхронный: событие `refund.initiated` обрабатывается
-  отдельным консьюмером.
+### Trade-offs
+- Refund is asynchronous: the `refund.initiated` event is processed
+  by a separate consumer.
 
-### Ограничения
-- Если payment-gateway недоступен, событие `refund.initiated` попадает в DLQ.
+### Limitations
+- If payment-gateway is unavailable, the `refund.initiated` event goes to the DLQ.
 ```
 
-### Секции Тестировщика
+### Tester Sections
 
-#### Test Plan (Тест-план)
+#### Test Plan
 
-Конкретные тест-кейсы с тестовыми данными.
+Specific test cases with test data.
 
 ```markdown
 ## Test Plan
 
-| TC ID  | Описание                          | Входные данные           | Ожидаемый результат         |
-|--------|-----------------------------------|--------------------------|-----------------------------|
-| TC-001 | Успешная отмена                   | order.status=placed, age=10min | 200, status=cancelled  |
-| TC-002 | Отмена просроченного заказа       | order.status=placed, age=40min | 410, WINDOW_EXPIRED    |
-| TC-003 | Отмена отправленного заказа       | order.status=shipped           | 409, NOT_CANCELLABLE   |
-| TC-004 | Повторная отмена (идемпотентность)| order.status=cancelled         | 200, status=cancelled  |
+| TC ID  | Description                       | Input Data                     | Expected Result               |
+|--------|-----------------------------------|--------------------------------|-------------------------------|
+| TC-001 | Successful cancellation           | order.status=placed, age=10min | 200, status=cancelled         |
+| TC-002 | Cancellation of expired order     | order.status=placed, age=40min | 410, WINDOW_EXPIRED           |
+| TC-003 | Cancellation of shipped order     | order.status=shipped           | 409, NOT_CANCELLABLE          |
+| TC-004 | Repeated cancellation (idempotency)| order.status=cancelled        | 200, status=cancelled         |
 ```
 
 #### Platform Tests
 
-Автоматизированные тесты с привязкой к TC.
+Automated tests linked to TC.
 
-#### Coverage Matrix (Матрица покрытия)
+#### Coverage Matrix
 
-Связь AC, тест-кейсов и доменных правил.
+Mapping between AC, test cases, and domain rules.
 
 ```markdown
 ## Coverage Matrix
@@ -314,36 +316,36 @@ API-контракты, схемы данных, миграции.
 | —      | TC-004          | IDMP constraint |
 ```
 
-## Кто что пишет
+## Who Writes What
 
-| Секция               | Владелец      | Гейт      |
+| Section              | Owner         | Gate      |
 |----------------------|---------------|-----------|
-| Intent               | Аналитик      | Gate A    |
-| Domain Rules         | Аналитик      | Gate A    |
-| Acceptance Criteria  | Аналитик      | Gate A    |
-| Decision Matrix      | Аналитик      | Gate A    |
-| Constraints          | Аналитик      | Gate A    |
-| Open Questions       | Аналитик      | Gate A    |
-| Decision Log         | Аналитик      | Gate A    |
-| Tech Spec            | Разработчик   | Gate B    |
-| Platform API         | Разработчик   | Gate B    |
-| Implementation Notes | Разработчик   | Gate B    |
-| Test Plan            | Тестировщик   | Gate C    |
-| Platform Tests       | Тестировщик   | Gate C    |
-| Coverage Matrix      | Тестировщик   | Gate C    |
+| Intent               | Analyst       | Gate A    |
+| Domain Rules         | Analyst       | Gate A    |
+| Acceptance Criteria  | Analyst       | Gate A    |
+| Decision Matrix      | Analyst       | Gate A    |
+| Constraints          | Analyst       | Gate A    |
+| Open Questions       | Analyst       | Gate A    |
+| Decision Log         | Analyst       | Gate A    |
+| Tech Spec            | Developer     | Gate B    |
+| Platform API         | Developer     | Gate B    |
+| Implementation Notes | Developer     | Gate B    |
+| Test Plan            | Tester        | Gate C    |
+| Platform Tests       | Tester        | Gate C    |
+| Coverage Matrix      | Tester        | Gate C    |
 
-## Правило прогрессивного раскрытия
+## Progressive Disclosure Rule
 
-Секции заполняются строго по порядку пайплайна:
+Sections are filled in strictly in pipeline order:
 
-1. **Аналитик** заполняет свои секции и проходит Gate A.
-2. **Разработчик** читает секции Аналитика как входной контракт, заполняет свои секции, проходит Gate B.
-3. **Тестировщик** читает секции Аналитика и Разработчика как входной контракт, заполняет свои секции, проходит Gate C.
+1. **Analyst** fills in their sections and passes Gate A.
+2. **Developer** reads the Analyst's sections as an input contract, fills in their own sections, and passes Gate B.
+3. **Tester** reads the Analyst's and Developer's sections as an input contract, fills in their own sections, and passes Gate C.
 
-Обратная модификация (например, Разработчик правит Intent) допускается только через процесс [поправок (amendment)](amendments.md).
+Backward modification (e.g., a Developer editing Intent) is only permitted through the [amendment](ru/amendments.md) process.
 
-## Связанные документы
+## Related Documents
 
-- [Методология](methodology.md)
-- [Роли и пайплайн](roles-and-pipeline.md)
-- [Валидация гейтов](gate-validation.md)
+- [Methodology](methodology.md)
+- [Roles and Pipeline](roles-and-pipeline.md)
+- [Gate Validation](ru/gate-validation.md)

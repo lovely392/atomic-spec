@@ -1,12 +1,14 @@
-# Роли и пайплайн
+**English** | [Русский](ru/roles-and-pipeline.md)
 
-В методологии Atomic Spec три роли. Каждая роль владеет определёнными секциями атома, читает определённые секции как входной контракт и несёт ответственность за прохождение своего гейта.
+# Roles and Pipeline
 
-## Пайплайн
+The Atomic Spec methodology defines three roles. Each role owns specific atom sections, reads specific sections as an input contract, and is responsible for passing its gate.
+
+## Pipeline
 
 ```
 ┌─────────────┐     Gate A     ┌─────────────┐     Gate B     ┌─────────────┐     Gate C     ┌──────┐
-│  Аналитик   │───────────────>│ Разработчик │───────────────>│ Тестировщик │───────────────>│ Done │
+│  Analyst    │───────────────>│  Developer  │───────────────>│   Tester    │───────────────>│ Done │
 │             │                │             │                │             │                │      │
 │ Intent      │                │ Tech Spec   │                │ Test Plan   │                │active│
 │ Domain Rules│                │ Platform API│                │ Platform    │                │done  │
@@ -18,134 +20,134 @@
 └─────────────┘                └─────────────┘                └─────────────┘                └──────┘
 ```
 
-## Роль: Аналитик
+## Role: Analyst
 
-### Владеет секциями
+### Owns Sections
 
-- **Intent** — суть атома в 1-3 предложениях
-- **Domain Rules** — правила предметной области с ID и последствиями нарушения
-- **Decision Matrix (DMT)** — таблица решений для комбинаций условий
-- **Constraints** — нефункциональные требования (PERF, SEC, IDMP и др.)
-- **Acceptance Criteria** (черновик) — Gherkin-сценарии, технологически нейтральные
-- **Open Questions** — фиксация и закрытие открытых вопросов
-- **Decision Log** — журнал принятых решений с обоснованием
+- **Intent** — the essence of the atom in 1-3 sentences
+- **Domain Rules** — domain rules with IDs and violation consequences
+- **Decision Matrix (DMT)** — decision table for condition combinations
+- **Constraints** — non-functional requirements (PERF, SEC, IDMP, etc.)
+- **Acceptance Criteria** (draft) — Gherkin scenarios, technology-neutral
+- **Open Questions** — capturing and closing open questions
+- **Decision Log** — log of decisions made, with rationale
 
-### Читает (входной контракт)
+### Reads (Input Contract)
 
-- Бизнес-требования, результаты Event Storming, пользовательские запросы
-- Существующие атомы (parent, see-also) для понимания контекста
+- Business requirements, Event Storming results, user requests
+- Existing atoms (parent, see-also) for understanding context
 
-### Выходной контракт
+### Output Contract
 
-Атом, прошедший Gate A: все секции аналитика заполнены, блокирующие вопросы закрыты, тип изменения указан.
+An atom that has passed Gate A: all analyst sections are filled in, blocking questions are closed, and the change type is specified.
 
-### Зона ответственности
+### Area of Responsibility
 
-- Корректность доменных правил
-- Полнота сценариев (позитивные и негативные)
-- Отсутствие технических решений в бизнес-секциях
-- Закрытие блокирующих Open Questions
+- Correctness of domain rules
+- Completeness of scenarios (positive and negative)
+- Absence of technical decisions in business sections
+- Closing blocking Open Questions
 
-## Роль: Разработчик
+## Role: Developer
 
-### Владеет секциями
+### Owns Sections
 
-- **Tech Spec** — API-контракты, схемы данных, миграции
-- **Platform API** — конкретные эндпоинты, тело запроса/ответа с типами
-- **Implementation Notes** — компромиссы, зависимости, ограничения, карта файлов
-- **Code** — файлы реализации
+- **Tech Spec** — API contracts, data schemas, migrations
+- **Platform API** — specific endpoints, request/response body with types
+- **Implementation Notes** — trade-offs, dependencies, limitations, file map
+- **Code** — implementation files
 
-### Читает (входной контракт)
+### Reads (Input Contract)
 
-| Секция             | Что извлекает                                      |
-|--------------------|----------------------------------------------------|
-| Intent             | Понимание бизнес-контекста                          |
-| Domain Rules       | Правила, которые код должен реализовать             |
-| Acceptance Criteria| Сценарии, которые код должен поддержать             |
-| Constraints        | NFR: производительность, безопасность, идемпотентность |
-| DMT                | Комбинаторная логика для ветвления                  |
-| Open Questions     | Нерешённые вопросы, влияющие на реализацию          |
+| Section              | What Is Extracted                                          |
+|----------------------|------------------------------------------------------------|
+| Intent               | Understanding of business context                          |
+| Domain Rules         | Rules that the code must implement                         |
+| Acceptance Criteria  | Scenarios that the code must support                       |
+| Constraints          | NFR: performance, security, idempotency                    |
+| DMT                  | Combinatorial logic for branching                          |
+| Open Questions       | Unresolved questions affecting implementation              |
 
-### Выходной контракт
+### Output Contract
 
-Атом, прошедший Gate B: Tech Spec заполнен, код написан, AC не противоречат реализации, все DR покрыты в коде.
+An atom that has passed Gate B: Tech Spec is filled in, code is written, AC do not contradict the implementation, and all DR are covered in code.
 
-### Зона ответственности
+### Area of Responsibility
 
-- Техническая корректность реализации
-- Соответствие кода доменным правилам
-- Отсутствие TODO/FIXME без привязки к Open Question
-- Заполнение Implementation Notes для передачи контекста тестировщику
+- Technical correctness of the implementation
+- Code compliance with domain rules
+- No TODO/FIXME without a link to an Open Question
+- Filling in Implementation Notes for handing off context to the tester
 
-## Роль: Тестировщик
+## Role: Tester
 
-### Владеет секциями
+### Owns Sections
 
-- **Test Plan** — конкретные тест-кейсы с тестовыми данными
-- **Platform Tests** — автоматизированные тесты
-- **Coverage Matrix** — матрица покрытия AC -> TC -> DR
-- **AC Review** — ревью критериев приёмки на полноту и тестируемость
+- **Test Plan** — specific test cases with test data
+- **Platform Tests** — automated tests
+- **Coverage Matrix** — coverage matrix AC -> TC -> DR
+- **AC Review** — review of acceptance criteria for completeness and testability
 
-### Читает (входной контракт)
+### Reads (Input Contract)
 
-| Секция             | Что извлекает                                      |
-|--------------------|----------------------------------------------------|
-| Acceptance Criteria| Сценарии, которые нужно покрыть тестами             |
-| Domain Rules       | Правила, каждое из которых должно быть протестировано |
-| Constraints        | NFR для специализированного тестирования (бенчмарки, безопасность) |
-| Tech Spec          | API-контракты для написания интеграционных тестов    |
-| Platform API       | Эндпоинты, форматы запросов/ответов для тестов      |
-| Implementation Notes | Зависимости и ограничения, влияющие на тест-план  |
+| Section              | What Is Extracted                                          |
+|----------------------|------------------------------------------------------------|
+| Acceptance Criteria  | Scenarios that need to be covered by tests                 |
+| Domain Rules         | Rules, each of which must be tested                        |
+| Constraints          | NFR for specialized testing (benchmarks, security)         |
+| Tech Spec            | API contracts for writing integration tests                |
+| Platform API         | Endpoints, request/response formats for tests              |
+| Implementation Notes | Dependencies and limitations affecting the test plan       |
 
-### Выходной контракт
+### Output Contract
 
-Атом, прошедший Gate C: Test Plan заполнен, каждый AC покрыт тестом, каждое DR протестировано, Coverage Matrix заполнена.
+An atom that has passed Gate C: Test Plan is filled in, every AC is covered by a test, every DR is tested, and the Coverage Matrix is filled in.
 
-### Зона ответственности
+### Area of Responsibility
 
-- Полнота тестового покрытия
-- Наличие негативных сценариев
-- Тестирование NFR (бенчмарки, безопасность, идемпотентность)
-- Проверка не только ответа, но и побочных эффектов (состояние БД, события)
+- Completeness of test coverage
+- Presence of negative scenarios
+- Testing of NFR (benchmarks, security, idempotency)
+- Verifying not only the response but also side effects (DB state, events)
 
-## Контрактная работа
+## Contract-Based Work
 
-Ключевой принцип пайплайна — контрактная работа между ролями:
+The key principle of the pipeline is contract-based work between roles:
 
 ```
-Аналитик                         Разработчик                      Тестировщик
+Analyst                          Developer                        Tester
     │                                 │                                 │
-    │  пишет Intent, DR, AC           │                                 │
-    │  пишет DMT, Constraints         │                                 │
-    │  закрывает Open Questions       │                                 │
+    │  writes Intent, DR, AC          │                                 │
+    │  writes DMT, Constraints        │                                 │
+    │  closes Open Questions          │                                 │
     │                                 │                                 │
     ├── Gate A ──────────────────────>│                                 │
-    │                                 │  читает Intent, DR, AC          │
-    │                                 │  читает Constraints, DMT        │
-    │                                 │  пишет Tech Spec, Platform API  │
-    │                                 │  пишет Implementation Notes     │
-    │                                 │  пишет Code                     │
+    │                                 │  reads Intent, DR, AC           │
+    │                                 │  reads Constraints, DMT         │
+    │                                 │  writes Tech Spec, Platform API │
+    │                                 │  writes Implementation Notes    │
+    │                                 │  writes Code                    │
     │                                 │                                 │
     │                                 ├── Gate B ─────────────────────>│
-    │                                 │                                 │  читает AC, DR, Constraints
-    │                                 │                                 │  читает Tech Spec, Platform API
-    │                                 │                                 │  пишет Test Plan
-    │                                 │                                 │  пишет Platform Tests
-    │                                 │                                 │  строит Coverage Matrix
+    │                                 │                                 │  reads AC, DR, Constraints
+    │                                 │                                 │  reads Tech Spec, Platform API
+    │                                 │                                 │  writes Test Plan
+    │                                 │                                 │  writes Platform Tests
+    │                                 │                                 │  builds Coverage Matrix
     │                                 │                                 │
     │                                 │                                 ├── Gate C ──> Done
 ```
 
-Каждая роль:
+Each role:
 
-1. **Читает** секции предыдущих ролей как **неизменяемый входной контракт**.
-2. **Пишет** только свои секции.
-3. **Не модифицирует** чужие секции без процесса amendment.
+1. **Reads** the sections of previous roles as an **immutable input contract**.
+2. **Writes** only its own sections.
+3. **Does not modify** other roles' sections without the amendment process.
 
-Это обеспечивает предсказуемость, трассируемость и возможность параллельной работы над разными атомами.
+This ensures predictability, traceability, and the ability to work on different atoms in parallel.
 
-## Связанные документы
+## Related Documents
 
-- [Анатомия атома](atom-anatomy.md)
-- [Валидация гейтов](gate-validation.md)
-- [Поправки (Amendments)](amendments.md)
+- [Atom Anatomy](atom-anatomy.md)
+- [Gate Validation](ru/gate-validation.md)
+- [Amendments](ru/amendments.md)

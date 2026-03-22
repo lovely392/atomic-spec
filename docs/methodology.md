@@ -1,39 +1,41 @@
-# Методология Atomic Spec
+**English** | [Русский](ru/methodology.md)
 
-## Философия
+# Atomic Spec Methodology
 
-Atomic Spec объединяет четыре подхода в единую методологию работы со спецификациями:
+## Philosophy
 
-- **DDD (Domain-Driven Design)** — спецификация строится вокруг предметной области, а не вокруг технических решений. Доменные правила первичны, реализация вторична.
-- **TDD (Test-Driven Development)** — критерии приёмки и тест-план пишутся до или параллельно с реализацией, а не после.
-- **Use-Case-Driven** — каждый атом описывает конкретный сценарий использования с акторами, действиями и ожидаемыми результатами.
-- **Requirements-Driven** — требования фиксируются явно и трассируются через весь пайплайн от Intent до покрытия тестами.
+Atomic Spec unifies four approaches into a single methodology for working with specifications:
 
-## Центральная идея: один файл = одна единица знания
+- **DDD (Domain-Driven Design)** — the specification is built around the domain, not around technical decisions. Domain rules come first; implementation comes second.
+- **TDD (Test-Driven Development)** — acceptance criteria and the test plan are written before or in parallel with implementation, not after.
+- **Use-Case-Driven** — each atom describes a specific use case with actors, actions, and expected outcomes.
+- **Requirements-Driven** — requirements are captured explicitly and traced through the entire pipeline from Intent to test coverage.
 
-Атом — это минимальная неделимая единица спецификации. Один Markdown-файл содержит всё, что нужно знать о конкретной функции, правиле или ограничении:
+## Core Idea: One File = One Unit of Knowledge
 
-- **Бизнес-контекст** (Intent, Domain Rules)
-- **Критерии приёмки** (Acceptance Criteria)
-- **Технические решения** (Tech Spec, Platform API)
-- **План тестирования** (Test Plan, Coverage Matrix)
-- **История решений** (Decision Log, Open Questions)
+An atom is the minimal indivisible unit of specification. A single Markdown file contains everything you need to know about a particular feature, rule, or constraint:
 
-Не нужно переключаться между Confluence, Jira, Google Docs и Slack, чтобы понять, что происходит. Всё в одном файле, под версионным контролем.
+- **Business context** (Intent, Domain Rules)
+- **Acceptance criteria** (Acceptance Criteria)
+- **Technical decisions** (Tech Spec, Platform API)
+- **Test planning** (Test Plan, Coverage Matrix)
+- **Decision history** (Decision Log, Open Questions)
 
-### Преимущества подхода
+There is no need to switch between Confluence, Jira, Google Docs, and Slack to understand what is going on. Everything is in one file, under version control.
 
-- **Трассируемость**: от бизнес-требования до конкретного теста — одна цепочка в одном файле.
-- **Автономность**: каждый атом самодостаточен. Его можно прочитать, понять и ревьюить изолированно.
-- **Версионируемость**: Git хранит полную историю изменений каждого атома.
-- **Рецензируемость**: PR на атом — это PR на спецификацию, код и тесты одновременно.
+### Benefits of This Approach
 
-## Принцип прогрессивного раскрытия (Progressive Disclosure)
+- **Traceability**: from a business requirement to a specific test — a single chain in a single file.
+- **Autonomy**: each atom is self-contained. It can be read, understood, and reviewed in isolation.
+- **Versionability**: Git stores the full change history of every atom.
+- **Reviewability**: a PR on an atom is a PR on the specification, code, and tests all at once.
 
-Атом заполняется не целиком за один раз, а поэтапно, по мере прохождения пайплайна:
+## Progressive Disclosure Principle
+
+An atom is not filled in all at once but incrementally, as it moves through the pipeline:
 
 ```
-Аналитик                  Разработчик              Тестировщик
+Analyst                   Developer                Tester
 ─────────────────────     ─────────────────────    ─────────────────────
 Intent                    Tech Spec                Test Plan
 Domain Rules              Platform API             Platform Tests
@@ -43,89 +45,89 @@ Open Questions
 Decision Log
 ```
 
-На каждом этапе заполняются только те секции, которые принадлежат текущей роли. Предыдущие секции не модифицируются без явного согласования (amendment).
+At each stage only the sections belonging to the current role are filled in. Previous sections are not modified without explicit agreement (amendment).
 
-Этот принцип обеспечивает:
+This principle ensures:
 
-- **Фокус**: каждая роль работает со своим срезом информации.
-- **Контракт**: граница между ролями чётко определена гейтами.
-- **Качество**: каждый этап проходит валидацию перед передачей следующей роли.
+- **Focus**: each role works with its own slice of information.
+- **Contract**: the boundary between roles is clearly defined by gates.
+- **Quality**: each stage is validated before handoff to the next role.
 
-## Три оси статуса
+## Three Status Axes
 
-Состояние атома описывается тремя независимыми осями:
+The state of an atom is described by three independent axes:
 
-### 1. Семантический статус (`status`)
+### 1. Semantic Status (`status`)
 
-Отражает зрелость спецификации как документа:
+Reflects the maturity of the specification as a document:
 
-| Значение     | Описание                                                    |
-|-------------|-------------------------------------------------------------|
-| `draft`     | Атом в работе, ещё не прошёл все гейты                      |
-| `active`    | Атом завершён, является действующей спецификацией            |
-| `deprecated`| Атом заменён другим (см. поле `supersedes` у нового атома)  |
+| Value        | Description                                                        |
+|-------------|--------------------------------------------------------------------|
+| `draft`     | The atom is in progress, has not yet passed all gates              |
+| `active`    | The atom is complete and serves as the current specification       |
+| `deprecated`| The atom has been replaced by another (see `supersedes` on the new atom) |
 
-### 2. Статус реализации (`implementation`)
+### 2. Implementation Status (`implementation`)
 
-Отражает состояние кода:
+Reflects the state of the code:
 
-| Значение      | Описание                                         |
-|--------------|--------------------------------------------------|
-| `none`       | Код ещё не написан                                |
-| `in-progress`| Реализация начата                                 |
-| `done`       | Реализация завершена, прошла Gate B               |
+| Value         | Description                                    |
+|--------------|------------------------------------------------|
+| `none`       | Code has not been written yet                  |
+| `in-progress`| Implementation has started                     |
+| `done`       | Implementation is complete, passed Gate B      |
 
-### 3. Статус верификации (`verification`)
+### 3. Verification Status (`verification`)
 
-Отражает состояние тестирования:
+Reflects the state of testing:
 
-| Значение      | Описание                                         |
-|--------------|--------------------------------------------------|
-| `none`       | Тестирование не начато                            |
-| `in-progress`| Тест-план создан, тесты пишутся                  |
-| `passed`     | Все тесты пройдены, Coverage Matrix заполнена     |
-| `failed`     | Тесты выявили проблемы, требуется доработка       |
+| Value         | Description                                    |
+|--------------|------------------------------------------------|
+| `none`       | Testing has not started                        |
+| `in-progress`| Test plan created, tests are being written     |
+| `passed`     | All tests pass, Coverage Matrix is filled in   |
+| `failed`     | Tests revealed issues, rework required         |
 
-### Комбинации осей
+### Axis Combinations
 
-Три оси независимы. Типичная последовательность состояний атома:
-
-```
-draft / none / none           — Аналитик работает
-draft / in-progress / none    — Разработчик реализует
-draft / done / in-progress    — Тестировщик проверяет
-active / done / passed        — Атом завершён
-```
-
-Нетипичные, но допустимые комбинации:
+The three axes are independent. A typical sequence of atom states:
 
 ```
-active / done / failed        — Регрессия: тесты упали на активном атоме
-deprecated / done / passed    — Атом заменён новым, но старый код ещё работает
+draft / none / none           — Analyst is working
+draft / in-progress / none    — Developer is implementing
+draft / done / in-progress    — Tester is verifying
+active / done / passed        — Atom is complete
 ```
 
-## Тест методологии
+Atypical but valid combinations:
 
-Методология Atomic Spec проходит простой тест:
+```
+active / done / failed        — Regression: tests failed on an active atom
+deprecated / done / passed    — Atom replaced by a new one, but old code still works
+```
 
-> **Можно ли восстановить полную историю проекта, читая только `git log`?**
+## Methodology Test
 
-Если ответ — да, значит методология применяется правильно. Это обеспечивается:
+The Atomic Spec methodology passes a simple test:
 
-- **Atom-first**: сначала атом спецификации, потом код. Каждый коммит привязан к конкретному атому.
-- **Один атом = один PR**: изменения атомарны и изолированы.
-- **Тип изменения в коммите**: по сообщению коммита понятно, что изменилось (параметр, правило, поток, модель, граница).
-- **Гейты как вехи**: прохождение гейта фиксируется в истории.
-- **Decision Log**: причины принятых решений сохраняются в самом атоме.
+> **Can you reconstruct the full project history by reading only `git log`?**
 
-Таким образом, репозиторий становится единственным источником правды — не только для кода, но и для всех требований, решений и их обоснований.
+If the answer is yes, the methodology is being applied correctly. This is ensured by:
 
-## Связанные документы
+- **Atom-first**: specification atom first, code second. Every commit is tied to a specific atom.
+- **One atom = one PR**: changes are atomic and isolated.
+- **Change type in the commit**: the commit message makes it clear what changed (parameter, rule, flow, model, boundary).
+- **Gates as milestones**: passing a gate is recorded in the history.
+- **Decision Log**: the rationale behind decisions is preserved in the atom itself.
 
-- [Быстрый старт](getting-started.md)
-- [Анатомия атома](atom-anatomy.md)
-- [Роли и пайплайн](roles-and-pipeline.md)
-- [Валидация гейтов](gate-validation.md)
-- [Типы изменений](change-types.md)
-- [Git-конвенции](git-conventions.md)
-- [Поправки (Amendments)](amendments.md)
+Thus the repository becomes the single source of truth — not only for code but also for all requirements, decisions, and their justifications.
+
+## Related Documents
+
+- [Quick Start](getting-started.md)
+- [Atom Anatomy](atom-anatomy.md)
+- [Roles and Pipeline](roles-and-pipeline.md)
+- [Gate Validation](ru/gate-validation.md)
+- [Change Types](ru/change-types.md)
+- [Git Conventions](ru/git-conventions.md)
+- [Amendments](ru/amendments.md)

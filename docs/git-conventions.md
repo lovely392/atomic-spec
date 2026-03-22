@@ -1,49 +1,51 @@
-# Git-конвенции
+**English** | [Русский](ru/git-conventions.md)
 
-Соглашения по работе с Git в методологии Atomic Spec. Единообразие в именовании веток, коммитов и PR обеспечивает выполнение теста методологии: историю проекта можно восстановить из `git log`.
+# Git Conventions
 
-## Именование веток
+Conventions for working with Git in the Atomic Spec methodology. Uniformity in naming branches, commits, and PRs ensures the methodology test is met: the project history can be reconstructed from `git log`.
 
-| Префикс     | Назначение                                          | Пример                          |
+## Branch Naming
+
+| Prefix      | Purpose                                             | Example                         |
 |-------------|-----------------------------------------------------|---------------------------------|
-| `spec/`     | Создание или обновление атома (фаза Аналитика)       | `spec/SPEC-042-cancel-order`    |
-| `feat/`     | Реализация атома (фаза Разработчика)                 | `feat/SPEC-042-cancel-order`    |
-| `test/`     | Тестирование атома (фаза Тестировщика)               | `test/SPEC-042-cancel-order`    |
-| `amend/`    | Поправка к существующему атому                       | `amend/SPEC-042a-extend-window` |
-| `rfc/`      | Запрос на обсуждение (для BoundaryChange)            | `rfc/SPEC-100-split-orders`     |
-| `domain/`   | Изменения на уровне домена (несколько атомов)         | `domain/orders-v2`              |
-| `release/`  | Подготовка релиза                                    | `release/2025.12`               |
+| `spec/`     | Creating or updating an atom (Analyst phase)         | `spec/SPEC-042-cancel-order`    |
+| `feat/`     | Implementing an atom (Developer phase)               | `feat/SPEC-042-cancel-order`    |
+| `test/`     | Testing an atom (Tester phase)                       | `test/SPEC-042-cancel-order`    |
+| `amend/`    | Amendment to an existing atom                        | `amend/SPEC-042a-extend-window` |
+| `rfc/`      | Request for discussion (for BoundaryChange)          | `rfc/SPEC-100-split-orders`     |
+| `domain/`   | Domain-level changes (multiple atoms)                | `domain/orders-v2`              |
+| `release/`  | Release preparation                                  | `release/2025.12`               |
 
-### Формат имени ветки
-
-```
-<префикс>/<ID-атома>-<краткое-описание>
-```
-
-- ID атома — обязателен (кроме `domain/` и `release/`)
-- Краткое описание — kebab-case, 2-4 слова
-- Только латиница и дефисы
-
-## Формат коммит-сообщений
-
-### Полный формат
+### Branch Name Format
 
 ```
-<тип>(<ID-атома>): <описание>
+<prefix>/<atom-ID>-<short-description>
+```
 
-<тело>
+- Atom ID — required (except for `domain/` and `release/`)
+- Short description — kebab-case, 2-4 words
+- Latin characters and hyphens only
 
-Change-Type: <тип-изменения>
-Gate: <гейт>
+## Commit Message Format
+
+### Full Format
+
+```
+<type>(<atom-ID>): <description>
+
+<body>
+
+Change-Type: <change-type>
+Gate: <gate>
 Breaking: <yes/no>
 ```
 
-**Пример:**
+**Example:**
 
 ```
-spec(SPEC-042): добавить атом отмены заказа
+spec(SPEC-042): add order cancellation atom
 
-Описаны Intent, Domain Rules (DR-001, DR-002, DR-003),
+Described Intent, Domain Rules (DR-001, DR-002, DR-003),
 Acceptance Criteria (AC-001, AC-002, AC-003).
 Constraints: PERF, SEC, IDMP.
 
@@ -52,145 +54,145 @@ Gate: A
 Breaking: no
 ```
 
-### Короткий формат
+### Short Format
 
-Для промежуточных коммитов, когда контекст очевиден:
-
-```
-<тип>(<ID-атома>): <описание>
-```
-
-**Примеры:**
+For intermediate commits when the context is obvious:
 
 ```
-spec(SPEC-042): добавить негативный AC для просроченной отмены
-feat(SPEC-042): реализовать cancel-order use case
-test(SPEC-042): добавить тест-кейс TC-004 идемпотентность
-amend(SPEC-042a): расширить окно отмены до 60 минут
-fix(SPEC-042): исправить проверку статуса в DR-001
+<type>(<atom-ID>): <description>
 ```
 
-### Типы коммитов
+**Examples:**
 
-| Тип      | Описание                                              |
+```
+spec(SPEC-042): add negative AC for expired cancellation
+feat(SPEC-042): implement cancel-order use case
+test(SPEC-042): add test case TC-004 idempotency
+amend(SPEC-042a): extend cancellation window to 60 minutes
+fix(SPEC-042): fix status check in DR-001
+```
+
+### Commit Types
+
+| Type     | Description                                           |
 |----------|-------------------------------------------------------|
-| `spec`   | Изменение атома спецификации (секции Аналитика)        |
-| `feat`   | Реализация (код + секции Разработчика)                 |
-| `test`   | Тестирование (тесты + секции Тестировщика)             |
-| `amend`  | Поправка к атому                                       |
-| `fix`    | Исправление ошибки в спецификации или коде             |
-| `refactor`| Рефакторинг без изменения поведения                   |
-| `docs`   | Изменения только в документации (не в атомах)          |
-| `chore`  | Служебные изменения (CI, линтеры, шаблоны)             |
+| `spec`   | Change to the spec atom (Analyst sections)             |
+| `feat`   | Implementation (code + Developer sections)             |
+| `test`   | Testing (tests + Tester sections)                      |
+| `amend`  | Amendment to an atom                                   |
+| `fix`    | Bug fix in specification or code                       |
+| `refactor`| Refactoring without behavior change                   |
+| `docs`   | Documentation-only changes (not in atoms)              |
+| `chore`  | Maintenance changes (CI, linters, templates)           |
 
-## PR-конвенции
+## PR Conventions
 
-### Название PR
-
-```
-[<Gate>] <ID-атома>: <название атома>
-```
-
-**Примеры:**
+### PR Title
 
 ```
-[Gate A] SPEC-042: Отмена заказа покупателем
-[Gate B] SPEC-042: Отмена заказа покупателем
-[Gate C] SPEC-042: Отмена заказа покупателем
-[Amend]  SPEC-042a: Расширение окна отмены
+[<Gate>] <atom-ID>: <atom title>
 ```
 
-### Обязательные блоки в описании PR
+**Examples:**
 
-Описание PR должно содержать следующие блоки:
+```
+[Gate A] SPEC-042: Order cancellation by buyer
+[Gate B] SPEC-042: Order cancellation by buyer
+[Gate C] SPEC-042: Order cancellation by buyer
+[Amend]  SPEC-042a: Extend cancellation window
+```
+
+### Required Sections in PR Description
+
+The PR description must contain the following sections:
 
 ```markdown
-## Атом
+## Atom
 
 - **ID**: SPEC-042
-- **Тип изменения**: FlowChange
-- **Гейт**: Gate A
+- **Change type**: FlowChange
+- **Gate**: Gate A
 
-## Что изменилось
+## What Changed
 
-- Добавлен атом отмены заказа
-- Описаны 3 Domain Rules
-- Написаны 3 AC (2 позитивных, 1 негативный)
+- Added order cancellation atom
+- Described 3 Domain Rules
+- Written 3 AC (2 positive, 1 negative)
 
-## Чеклист гейта
+## Gate Checklist
 
-- [x] A1: Intent заполнен
-- [x] A2: Domain Rules существуют
-- [x] A3: AC написаны
-- [x] A4: Акторы указаны
-- [x] A5: События указаны
-- [x] A6: Нет технических решений
-- [x] A7: Open Questions закрыты
-- [x] A8: Тип изменения указан
-- [x] A9: Негативные AC есть
+- [x] A1: Intent is filled in
+- [x] A2: Domain Rules exist
+- [x] A3: AC are written
+- [x] A4: Actors are specified
+- [x] A5: Events are specified
+- [x] A6: No technical decisions
+- [x] A7: Open Questions are closed
+- [x] A8: Change type is specified
+- [x] A9: Negative AC exist
 
 ## Breaking Changes
 
-Нет
+None
 ```
 
-### Обязательные блоки
+### Required Sections
 
-| Блок                | Описание                                               |
-|---------------------|---------------------------------------------------------|
-| **Атом**            | ID, тип изменения, гейт                                |
-| **Что изменилось**  | Краткий список изменений                                |
-| **Чеклист гейта**   | Полный чеклист соответствующего гейта с отметками        |
-| **Breaking Changes**| Явное указание наличия или отсутствия ломающих изменений |
+| Section             | Description                                            |
+|---------------------|--------------------------------------------------------|
+| **Atom**            | ID, change type, gate                                  |
+| **What Changed**    | Brief list of changes                                  |
+| **Gate Checklist**  | Full checklist of the corresponding gate with marks     |
+| **Breaking Changes**| Explicit indication of presence or absence of breaking changes |
 
-## Правила
+## Rules
 
 ### 1. Atom-first
 
-Сначала атом спецификации, потом код. Нельзя создавать PR с кодом без соответствующего атома, прошедшего Gate A.
+Spec atom first, then code. You cannot create a PR with code without a corresponding atom that has passed Gate A.
 
 ```
-# Правильно:
+# Correct:
 spec/ PR -> merge -> feat/ PR -> merge -> test/ PR -> merge
 
-# Неправильно:
-feat/ PR без существующего атома
+# Incorrect:
+feat/ PR without an existing atom
 ```
 
-### 2. Один атом = один PR
+### 2. One atom = one PR
 
-Каждый PR содержит изменения только одного атома. Исключение — ветки `domain/`, где допускается изменение нескольких связанных атомов.
+Each PR contains changes to only one atom. Exception — `domain/` branches, where changes to multiple related atoms are allowed.
 
-### 3. Тип изменения обязателен
+### 3. Change type is required
 
-Каждый PR, затрагивающий атом, должен содержать `Change-Type` в описании коммита. Это необходимо для понимания масштаба изменений при чтении `git log`.
+Every PR that affects an atom must contain `Change-Type` in the commit description. This is necessary for understanding the scale of changes when reading `git log`.
 
-Типы изменений: `ParameterChange`, `RuleChange`, `FlowChange`, `ModelChange`, `BoundaryChange`, `PlatformChange`.
+Change types: `ParameterChange`, `RuleChange`, `FlowChange`, `ModelChange`, `BoundaryChange`, `PlatformChange`.
 
-Подробнее см. [Типы изменений](change-types.md).
+For details see [Change Types](change-types.md).
 
-### 4. Breaking Changes требуют ревью
+### 4. Breaking Changes require review
 
-Если изменение является ломающим (breaking), PR требует расширенного ревью:
+If a change is breaking, the PR requires extended review:
 
-- `ModelChange` с breaking — ревью от Архитектора
-- `BoundaryChange` — всегда ревью от CTO + Архитектор + Product
-- Изменение `emits` или `consumes` — ревью от владельцев подписчиков
+- `ModelChange` with breaking — review from Architect
+- `BoundaryChange` — always review from CTO + Architect + Product
+- Change to `emits` or `consumes` — review from subscriber owners
 
-Breaking Changes обозначаются в коммите:
+Breaking Changes are indicated in the commit:
 
 ```
-feat(SPEC-042): изменить формат события order.cancelled
+feat(SPEC-042): change order.cancelled event format
 
-BREAKING CHANGE: поле `reason` теперь обязательное
+BREAKING CHANGE: field `reason` is now required
 
 Change-Type: ModelChange
 Gate: B
 Breaking: yes
 ```
 
-## Связанные документы
+## Related Documents
 
-- [Типы изменений](change-types.md)
-- [Валидация гейтов](gate-validation.md)
-- [Поправки (Amendments)](amendments.md)
+- [Change Types](change-types.md)
+- [Gate Validation](gate-validation.md)
+- [Amendments](amendments.md)

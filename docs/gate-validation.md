@@ -1,101 +1,103 @@
-# Валидация гейтов
+**English** | [Русский](ru/gate-validation.md)
 
-Гейты — контрольные точки между ролями в пайплайне Atomic Spec. Каждый гейт содержит чеклист, который должен быть полностью выполнен перед передачей атома следующей роли.
+# Gate Validation
 
-## Gate A: Аналитик -> Разработчик
+Gates are checkpoints between roles in the Atomic Spec pipeline. Each gate contains a checklist that must be fully completed before passing an atom to the next role.
 
-Gate A проверяет, что бизнес-спецификация полна, непротиворечива и готова к реализации.
+## Gate A: Analyst -> Developer
 
-| #  | Проверка                  | Критерий                                                                 |
+Gate A verifies that the business specification is complete, consistent, and ready for implementation.
+
+| #  | Check                     | Criterion                                                                |
 |----|---------------------------|--------------------------------------------------------------------------|
-| A1 | Intent заполнен           | 1-3 предложения, без технических деталей                                 |
-| A2 | Domain Rules существуют   | Минимум 1 DR с уникальным ID и описанием последствий нарушения           |
-| A3 | AC написаны               | Минимум 1 Gherkin-сценарий, технологически нейтральный                   |
-| A4 | Акторы указаны            | Заполнены в frontmatter (`actors`) и упоминаются в AC                    |
-| A5 | События указаны           | Поля `emits` и `consumes` заполнены в frontmatter                        |
-| A6 | Нет технических решений   | В Intent и Domain Rules отсутствуют фреймворки, БД, API, эндпоинты       |
-| A7 | Open Questions            | Все блокирующие вопросы закрыты (`status: closed` с `resolution`)         |
-| A8 | Тип изменения указан      | Одно из значений: `ParameterChange`, `RuleChange`, `FlowChange`, `ModelChange`, `BoundaryChange` |
-| A9 | Негативные AC             | На каждый happy-path (позитивный) сценарий есть хотя бы один негативный AC |
+| A1 | Intent is filled in       | 1-3 sentences, no technical details                                      |
+| A2 | Domain Rules exist        | At least 1 DR with a unique ID and description of violation consequences |
+| A3 | AC are written            | At least 1 Gherkin scenario, technology-neutral                          |
+| A4 | Actors are specified      | Filled in frontmatter (`actors`) and referenced in AC                    |
+| A5 | Events are specified      | Fields `emits` and `consumes` are filled in frontmatter                  |
+| A6 | No technical decisions    | Intent and Domain Rules contain no frameworks, DBs, APIs, endpoints      |
+| A7 | Open Questions            | All blocking questions are closed (`status: closed` with `resolution`)   |
+| A8 | Change type is specified  | One of: `ParameterChange`, `RuleChange`, `FlowChange`, `ModelChange`, `BoundaryChange` |
+| A9 | Negative AC               | For each happy-path (positive) scenario there is at least one negative AC |
 
-### Примеры нарушений Gate A
+### Examples of Gate A Violations
 
-**A1 — нарушение**: "Покупатель отменяет заказ через REST API POST-эндпоинт" — упоминание REST API в Intent.
+**A1 — violation**: "Buyer cancels an order via REST API POST endpoint" — mention of REST API in Intent.
 
-**A6 — нарушение**: "DR-003: Данные сохраняются в PostgreSQL в таблице orders" — упоминание конкретной БД в Domain Rules.
+**A6 — violation**: "DR-003: Data is stored in PostgreSQL in the orders table" — mention of a specific DB in Domain Rules.
 
-**A9 — нарушение**: Есть AC "Успешная отмена заказа", но нет AC для случая, когда отмена невозможна.
+**A9 — violation**: There is an AC "Successful order cancellation", but no AC for the case when cancellation is impossible.
 
-## Gate B: Разработчик -> Тестировщик
+## Gate B: Developer -> Tester
 
-Gate B проверяет, что техническая реализация соответствует бизнес-спецификации и готова к тестированию.
+Gate B verifies that the technical implementation matches the business specification and is ready for testing.
 
-| #  | Проверка                       | Критерий                                                                 |
+| #  | Check                          | Criterion                                                                |
 |----|--------------------------------|--------------------------------------------------------------------------|
-| B1 | Tech Spec заполнен             | API-контракты, схемы данных, миграции описаны                            |
-| B2 | Platform секция заполнена      | Эндпоинт, тело запроса, ответы с типами данных                           |
-| B3 | Код существует                 | Файлы реализации созданы или пути к ним указаны                          |
-| B4 | AC не нарушены                 | Tech Spec не противоречит ни одному Acceptance Criteria                  |
-| B5 | DR покрыты                     | Реализация покрывает все Domain Rules; каждое DR отмечено в коде          |
-| B6 | NFR учтены                     | Constraints (PERF, SEC, IDMP) отражены в реализации                      |
-| B7 | Нет TODO/FIXME без OQ          | Каждый TODO или FIXME в коде ссылается на конкретный Open Question       |
-| B8 | Implementation Notes заполнены | Компромиссы, зависимости, ограничения, карта файлов — всё описано        |
+| B1 | Tech Spec is filled in         | API contracts, data schemas, migrations are described                    |
+| B2 | Platform section is filled in  | Endpoint, request body, responses with data types                        |
+| B3 | Code exists                    | Implementation files are created or paths to them are specified          |
+| B4 | AC are not violated            | Tech Spec does not contradict any Acceptance Criteria                    |
+| B5 | DR are covered                 | Implementation covers all Domain Rules; each DR is marked in code        |
+| B6 | NFR are addressed              | Constraints (PERF, SEC, IDMP) are reflected in implementation            |
+| B7 | No TODO/FIXME without OQ       | Every TODO or FIXME in code references a specific Open Question          |
+| B8 | Implementation Notes filled in | Compromises, dependencies, limitations, file map — all described         |
 
-### Примеры нарушений Gate B
+### Examples of Gate B Violations
 
-**B4 — нарушение**: AC говорит "средства возвращаются на исходный способ оплаты", но Tech Spec описывает возврат на баланс аккаунта.
+**B4 — violation**: AC says "funds are returned to the original payment method", but Tech Spec describes a refund to the account balance.
 
-**B5 — нарушение**: DR-002 описывает окно отмены в 30 минут, но в коде нет проверки времени.
+**B5 — violation**: DR-002 describes a 30-minute cancellation window, but there is no time check in the code.
 
-**B7 — нарушение**: В коде есть `// TODO: handle edge case` без ссылки на OQ-ID.
+**B7 — violation**: Code contains `// TODO: handle edge case` without a reference to an OQ-ID.
 
-## Gate C: Тестировщик -> Done
+## Gate C: Tester -> Done
 
-Gate C проверяет, что тестирование полностью покрывает спецификацию и реализацию.
+Gate C verifies that testing fully covers the specification and implementation.
 
-| #  | Проверка                   | Критерий                                                                 |
+| #  | Check                      | Criterion                                                                |
 |----|----------------------------|--------------------------------------------------------------------------|
-| C1 | Test Plan заполнен         | Конкретные тест-кейсы с тестовыми данными (не абстрактные описания)       |
-| C2 | AC покрыты                 | Каждый Gherkin-сценарий имеет соответствующий тест-кейс                  |
-| C3 | DR покрыты                 | Каждое Domain Rule протестировано                                         |
-| C4 | Edge cases                 | Минимум 1 негативный сценарий на каждый AC                               |
-| C5 | NFR протестированы         | PERF — бенчмарк, SEC — проверка безопасности, IDMP — повторный вызов     |
-| C6 | Coverage Matrix заполнена  | Матрица AC -> TC -> DR заполнена, нет пустых строк                       |
-| C7 | Postconditions             | Проверяется не только ответ, но и состояние БД, порождённые события       |
+| C1 | Test Plan is filled in     | Specific test cases with test data (not abstract descriptions)           |
+| C2 | AC are covered             | Each Gherkin scenario has a corresponding test case                      |
+| C3 | DR are covered             | Each Domain Rule is tested                                               |
+| C4 | Edge cases                 | At least 1 negative scenario per AC                                      |
+| C5 | NFR are tested             | PERF — benchmark, SEC — security check, IDMP — repeated call            |
+| C6 | Coverage Matrix filled in  | AC -> TC -> DR matrix is filled, no empty rows                           |
+| C7 | Postconditions             | Not only the response is checked, but also DB state, emitted events      |
 
-### Примеры нарушений Gate C
+### Examples of Gate C Violations
 
-**C2 — нарушение**: Есть AC-003 "Отмена отправленного заказа", но в Test Plan нет соответствующего тест-кейса.
+**C2 — violation**: There is AC-003 "Cancellation of a shipped order", but there is no corresponding test case in the Test Plan.
 
-**C5 — нарушение**: В Constraints указано `IDMP: повторный запрос идемпотентен`, но нет тест-кейса с повторным вызовом.
+**C5 — violation**: Constraints specify `IDMP: repeated request is idempotent`, but there is no test case with a repeated call.
 
-**C7 — нарушение**: Тест проверяет HTTP 200, но не проверяет, что заказ действительно перешёл в статус `cancelled` в базе данных и событие `order.cancelled` было опубликовано.
+**C7 — violation**: The test checks for HTTP 200, but does not verify that the order actually transitioned to `cancelled` status in the database and the `order.cancelled` event was published.
 
-## Сводная таблица
+## Summary Table
 
 ```
-Gate A (9 проверок)          Gate B (8 проверок)          Gate C (7 проверок)
+Gate A (9 checks)            Gate B (8 checks)            Gate C (7 checks)
 ─────────────────────        ─────────────────────        ─────────────────────
 A1  Intent                   B1  Tech Spec                C1  Test Plan
-A2  Domain Rules             B2  Platform API             C2  AC покрытие
-A3  AC                       B3  Код                      C3  DR покрытие
-A4  Акторы                   B4  AC соответствие          C4  Edge cases
-A5  События                  B5  DR покрытие              C5  NFR тесты
-A6  Нет техн. решений        B6  NFR учтены               C6  Coverage Matrix
+A2  Domain Rules             B2  Platform API             C2  AC coverage
+A3  AC                       B3  Code                     C3  DR coverage
+A4  Actors                   B4  AC compliance            C4  Edge cases
+A5  Events                   B5  DR coverage              C5  NFR tests
+A6  No tech decisions        B6  NFR addressed            C6  Coverage Matrix
 A7  Open Questions           B7  TODO/FIXME               C7  Postconditions
-A8  Тип изменения            B8  Impl Notes
-A9  Негативные AC
+A8  Change type              B8  Impl Notes
+A9  Negative AC
 ```
 
-## Процесс валидации
+## Validation Process
 
-1. Автор создаёт PR с соответствующей веткой (см. [Git-конвенции](git-conventions.md)).
-2. Ревьюер проходит по чеклисту гейта, отмечая каждый пункт.
-3. Если все пункты пройдены — PR мерджится, атом переходит к следующей роли.
-4. Если есть нарушения — PR отправляется на доработку с указанием конкретных пунктов.
+1. The author creates a PR with the corresponding branch (see [Git Conventions](git-conventions.md)).
+2. The reviewer goes through the gate checklist, marking each item.
+3. If all items pass — the PR is merged, and the atom moves to the next role.
+4. If there are violations — the PR is sent back for revision with specific items indicated.
 
-## Связанные документы
+## Related Documents
 
-- [Роли и пайплайн](roles-and-pipeline.md)
-- [Анатомия атома](atom-anatomy.md)
-- [Git-конвенции](git-conventions.md)
+- [Roles and Pipeline](roles-and-pipeline.md)
+- [Atom Anatomy](atom-anatomy.md)
+- [Git Conventions](git-conventions.md)

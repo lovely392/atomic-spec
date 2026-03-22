@@ -1,162 +1,164 @@
-# Типы изменений
+**English** | [Русский](ru/change-types.md)
 
-Каждый атом в Atomic Spec имеет тип изменения (Change Type), определяющий масштаб воздействия, список стейкхолдеров и процесс согласования.
+# Change Types
 
-## Шесть типов изменений
+Each atom in Atomic Spec has a change type (Change Type) that determines the scope of impact, the list of stakeholders, and the approval process.
+
+## Six Change Types
 
 ### 1. ParameterChange
 
-Изменение значения константы или параметра конфигурации.
+Change to a constant value or configuration parameter.
 
-| Характеристика   | Значение                        |
+| Characteristic   | Value                           |
 |------------------|---------------------------------|
-| **Масштаб**      | Минимальный                     |
-| **Стейкхолдеры** | 1 стейкхолдер (владелец параметра) |
-| **Блокирующий**  | Нет                             |
-| **Требует RFC**  | Нет                             |
+| **Scope**        | Minimal                         |
+| **Stakeholders** | 1 stakeholder (parameter owner) |
+| **Blocking**     | No                              |
+| **Requires RFC** | No                              |
 
-**Примеры:**
-- Изменение таймаута отмены заказа с 30 минут на 60 минут
-- Изменение минимальной суммы заказа с 500 на 300 рублей
-- Обновление лимита попыток ввода пароля с 3 до 5
+**Examples:**
+- Changing the order cancellation timeout from 30 minutes to 60 minutes
+- Changing the minimum order amount from 500 to 300
+- Updating the password attempt limit from 3 to 5
 
-**Что меняется в атоме:** только значение в Domain Rules или Constraints. Структура атома не затрагивается.
+**What changes in the atom:** only the value in Domain Rules or Constraints. The atom structure is not affected.
 
 ---
 
 ### 2. RuleChange
 
-Изменение доменного правила — условий, логики, последствий нарушения.
+Change to a domain rule — conditions, logic, violation consequences.
 
-| Характеристика   | Значение                        |
+| Characteristic   | Value                           |
 |------------------|---------------------------------|
-| **Масштаб**      | Средний                         |
-| **Стейкхолдеры** | Product + Tech                  |
-| **Блокирующий**  | Возможно                        |
-| **Требует RFC**  | Нет                             |
+| **Scope**        | Medium                          |
+| **Stakeholders** | Product + Tech                  |
+| **Blocking**     | Possibly                        |
+| **Requires RFC** | No                              |
 
-**Примеры:**
-- Разрешить отмену заказа не только в статусе `placed`, но и в `processing`
-- Добавить новое условие к правилу валидации (DR-004)
-- Изменить последствие нарушения с ошибки на предупреждение
+**Examples:**
+- Allow order cancellation not only in `placed` status, but also in `processing`
+- Add a new condition to the validation rule (DR-004)
+- Change the violation consequence from error to warning
 
-**Что меняется в атоме:** Domain Rules, возможно AC (новые сценарии), DMT.
+**What changes in the atom:** Domain Rules, possibly AC (new scenarios), DMT.
 
 ---
 
 ### 3. FlowChange
 
-Изменение шага или ветвления в сценарии использования.
+Change to a step or branching in a use case scenario.
 
-| Характеристика   | Значение                        |
+| Characteristic   | Value                           |
 |------------------|---------------------------------|
-| **Масштаб**      | Средний                         |
-| **Стейкхолдеры** | Product                         |
-| **Блокирующий**  | Возможно                        |
-| **Требует RFC**  | Нет                             |
+| **Scope**        | Medium                          |
+| **Stakeholders** | Product                         |
+| **Blocking**     | Possibly                        |
+| **Requires RFC** | No                              |
 
-**Примеры:**
-- Добавить шаг подтверждения перед отменой заказа
-- Ввести альтернативный сценарий при недоступности платёжного шлюза
-- Изменить порядок шагов в процессе оформления заказа
+**Examples:**
+- Add a confirmation step before order cancellation
+- Introduce an alternative scenario when the payment gateway is unavailable
+- Change the order of steps in the checkout process
 
-**Что меняется в атоме:** AC (новые/изменённые сценарии), возможно Domain Rules, DMT.
+**What changes in the atom:** AC (new/modified scenarios), possibly Domain Rules, DMT.
 
 ---
 
 ### 4. ModelChange
 
-Изменение агрегата, поля, события или структуры данных.
+Change to an aggregate, field, event, or data structure.
 
-| Характеристика   | Значение                        |
+| Characteristic   | Value                           |
 |------------------|---------------------------------|
-| **Масштаб**      | Значительный                    |
-| **Стейкхолдеры** | Product + Tech + Архитектор     |
-| **Блокирующий**  | Да                              |
-| **Требует RFC**  | Нет (но требует ревью Архитектора) |
+| **Scope**        | Significant                     |
+| **Stakeholders** | Product + Tech + Architect      |
+| **Blocking**     | Yes                             |
+| **Requires RFC** | No (but requires Architect review) |
 
-**Примеры:**
-- Добавить поле `cancellation_reason` в агрегат Order
-- Создать новое доменное событие `order.partially_cancelled`
-- Изменить структуру payload события `order.cancelled`
-- Разделить агрегат Order на Order и OrderFulfillment
+**Examples:**
+- Add a `cancellation_reason` field to the Order aggregate
+- Create a new domain event `order.partially_cancelled`
+- Change the payload structure of the `order.cancelled` event
+- Split the Order aggregate into Order and OrderFulfillment
 
-**Что меняется в атоме:** Domain Rules, emits/consumes, Tech Spec, Platform API, возможно children.
+**What changes in the atom:** Domain Rules, emits/consumes, Tech Spec, Platform API, possibly children.
 
 ---
 
 ### 5. BoundaryChange
 
-Изменение границы домена — перенос ответственности, слияние или разделение контекстов.
+Change to a domain boundary — transfer of responsibility, merging or splitting contexts.
 
-| Характеристика   | Значение                        |
+| Characteristic   | Value                           |
 |------------------|---------------------------------|
-| **Масштаб**      | Максимальный                    |
-| **Стейкхолдеры** | CTO + Архитектор + Product      |
-| **Блокирующий**  | Да                              |
-| **Требует RFC**  | Да                              |
+| **Scope**        | Maximum                         |
+| **Stakeholders** | CTO + Architect + Product       |
+| **Blocking**     | Yes                             |
+| **Requires RFC** | Yes                             |
 
-**Примеры:**
-- Выделить процесс возвратов из домена Orders в отдельный домен Refunds
-- Объединить домены Payments и Billing
-- Перенести ответственность за нотификации из Orders в Notifications
+**Examples:**
+- Extract the refund process from the Orders domain into a separate Refunds domain
+- Merge the Payments and Billing domains
+- Transfer notification responsibility from Orders to Notifications
 
-**Что меняется в атоме:** parent/children, возможно создание новых атомов, deprecation старых, изменение emits/consumes по всему графу.
+**What changes in the atom:** parent/children, possibly creation of new atoms, deprecation of old ones, changes to emits/consumes across the entire graph.
 
 ---
 
 ### 6. PlatformChange
 
-Изменение API-контракта без изменения бизнес-логики.
+Change to an API contract without changing business logic.
 
-| Характеристика   | Значение                        |
+| Characteristic   | Value                           |
 |------------------|---------------------------------|
-| **Масштаб**      | Технический                     |
-| **Стейкхолдеры** | Tech Lead                       |
-| **Блокирующий**  | Нет                             |
-| **Требует RFC**  | Нет                             |
+| **Scope**        | Technical                       |
+| **Stakeholders** | Tech Lead                       |
+| **Blocking**     | No                              |
+| **Requires RFC** | No                              |
 
-**Примеры:**
-- Переименование эндпоинта с сохранением backward compatibility
-- Добавление нового опционального поля в ответ API
-- Изменение формата даты с Unix timestamp на ISO-8601
-- Версионирование API (v1 -> v2) с сохранением поведения
+**Examples:**
+- Renaming an endpoint while maintaining backward compatibility
+- Adding a new optional field to the API response
+- Changing the date format from Unix timestamp to ISO-8601
+- API versioning (v1 -> v2) while preserving behavior
 
-**Что меняется в атоме:** Platform API, Tech Spec. Domain Rules и AC не затрагиваются.
+**What changes in the atom:** Platform API, Tech Spec. Domain Rules and AC are not affected.
 
-## Сводная таблица
+## Summary Table
 
-| Тип              | Масштаб       | Стейкхолдеры          | Блокирующий | RFC  |
+| Type             | Scope         | Stakeholders          | Blocking    | RFC  |
 |------------------|---------------|-----------------------|-------------|------|
-| ParameterChange  | Минимальный   | 1 стейкхолдер         | Нет         | Нет  |
-| RuleChange       | Средний       | Product + Tech        | Возможно    | Нет  |
-| FlowChange       | Средний       | Product               | Возможно    | Нет  |
-| ModelChange      | Значительный  | Product + Tech + Arch | Да          | Нет  |
-| BoundaryChange   | Максимальный  | CTO + Arch + Product  | Да          | Да   |
-| PlatformChange   | Технический   | Tech Lead             | Нет         | Нет  |
+| ParameterChange  | Minimal       | 1 stakeholder         | No          | No   |
+| RuleChange       | Medium        | Product + Tech        | Possibly    | No   |
+| FlowChange       | Medium        | Product               | Possibly    | No   |
+| ModelChange      | Significant   | Product + Tech + Arch | Yes         | No   |
+| BoundaryChange   | Maximum       | CTO + Arch + Product  | Yes         | Yes  |
+| PlatformChange   | Technical     | Tech Lead             | No          | No   |
 
-## Матрица решений: новый атом или правка существующего?
+## Decision Matrix: New Atom or Edit Existing?
 
-Не каждое изменение требует создания нового атома. Используйте эту матрицу для принятия решения:
+Not every change requires creating a new atom. Use this matrix to make the decision:
 
-| Ситуация                                                    | Действие                    |
+| Situation                                                   | Action                      |
 |------------------------------------------------------------|-----------------------------|
-| Изменение значения параметра (ParameterChange)              | Правка существующего атома  |
-| Добавление нового DR к существующему сценарию (RuleChange)  | Правка существующего атома  |
-| Новый сценарий в том же контексте (FlowChange)              | Правка существующего атома  |
-| Значительное расширение scope существующего атома            | Новый дочерний атом         |
-| Новое независимое поведение (FlowChange)                    | Новый атом                  |
-| Новый агрегат или событие (ModelChange)                     | Новый атом                  |
-| Замена существующего поведения (любой тип)                  | Новый атом с `supersedes`   |
-| Изменение границы домена (BoundaryChange)                   | Новые атомы + deprecation   |
-| Чисто технические изменения API (PlatformChange)            | Правка существующего атома  |
+| Changing a parameter value (ParameterChange)                | Edit existing atom          |
+| Adding a new DR to an existing scenario (RuleChange)        | Edit existing atom          |
+| New scenario in the same context (FlowChange)               | Edit existing atom          |
+| Significant scope expansion of an existing atom             | New child atom              |
+| New independent behavior (FlowChange)                       | New atom                    |
+| New aggregate or event (ModelChange)                        | New atom                    |
+| Replacing existing behavior (any type)                      | New atom with `supersedes`  |
+| Changing domain boundary (BoundaryChange)                   | New atoms + deprecation     |
+| Purely technical API changes (PlatformChange)               | Edit existing atom          |
 
-### Правило: scope не расширяется
+### Rule: Scope Does Not Expand
 
-Если изменение приводит к тому, что атом начинает описывать два разных сценария или два разных агрегата — это сигнал к декомпозиции. Создайте дочерний атом или новый самостоятельный атом.
+If a change causes an atom to start describing two different scenarios or two different aggregates — this is a signal for decomposition. Create a child atom or a new standalone atom.
 
-## Связанные документы
+## Related Documents
 
-- [Git-конвенции](git-conventions.md)
-- [Поправки (Amendments)](amendments.md)
-- [Валидация гейтов](gate-validation.md)
+- [Git Conventions](git-conventions.md)
+- [Amendments](amendments.md)
+- [Gate Validation](gate-validation.md)

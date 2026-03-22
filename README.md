@@ -1,24 +1,31 @@
-# Atomic Spec
+**English** | [Русский](README.ru.md)
 
-> A methodology for living requirements — one atom, one file, one unit of knowledge.
+<p align="center">
+  <img src="assets/logo.svg" alt="Atomic Spec" width="480"/>
+</p>
 
-Atomic Spec unifies **Domain-Driven Design**, **Test-Driven Development**, **Use-Case-Driven**, and **Requirements-Driven** approaches into a single flow where every requirement is a living artifact with history, not a frozen document.
+<p align="center">
+  <strong>An AI-native methodology for living requirements — one atom, one file, one unit of knowledge.</strong>
+</p>
+
+Atomic Spec is an **AI-native** methodology that unifies **Domain-Driven Design**, **Test-Driven Development**, **Use-Case-Driven**, and **Requirements-Driven** approaches into a single flow orchestrated by AI agents. Every requirement is a living artifact with history, not a frozen document.
 
 ## Core Idea
 
-Every requirement lives in a single `*.spec.md` file (an "atom") that progresses through three roles:
+Every requirement lives in a single `*.spec.md` file (an "atom") that progresses through three **AI agent roles**:
 
-**Analyst** (business intent) → **Developer** (implementation) → **Tester** (verification)
+**Analyst Agent** (business intent) → **Developer Agent** (implementation) → **Tester Agent** (verification)
 
-Each transition is validated by a **Gate** checklist.
+An **Orchestrator Agent** coordinates the pipeline, switches roles, and validates artifacts at each **Gate** checkpoint. The entire workflow — from decomposition to code to tests — is driven by AI agents following strict contracts.
 
 ## Key Principles
 
+- **AI-native**: three specialized AI agents (Analyst, Developer, Tester) orchestrated by a meta-agent
 - **One atom = one file = one unit of knowledge** (`*.spec.md`)
 - **Progressive disclosure**: from business intent to test cases and code
 - **Technology agnostic core**: the heart of an atom is platform-independent
 - **Traceability**: every artifact references its source atom
-- **Contract-based role pipeline**: each role produces artifacts, validated at gates
+- **Contract-based agent pipeline**: each agent role produces artifacts, validated at gates
 
 ## Atom Hierarchy
 
@@ -41,9 +48,26 @@ System                          <- changes once in a product's lifetime
 
 See [Getting Started](docs/getting-started.md) for a detailed walkthrough.
 
-## AI Agent Integration
+## AI Agent Orchestrator
 
-Atomic Spec includes a skill for AI coding agents (Claude Code) that orchestrates the full methodology pipeline automatically. See [`skill/`](skill/) directory and [installation instructions](skill/README.md).
+Atomic Spec is designed to be executed by AI agents. The included **Orchestrator Skill** for [Claude Code](https://claude.ai/claude-code) drives the full pipeline:
+
+1. **Decomposes** a task into atoms (spec files)
+2. **Switches** between Analyst → Developer → Tester agent roles
+3. **Validates** artifacts at each Gate before passing to the next role
+4. **Follows** git conventions for branches, commits, and PRs
+
+Install the skill and your AI agent becomes a full Atomic Spec practitioner. See [`skill/`](skill/) directory and [installation instructions](skill/README.md).
+
+```
+You: "Design a user registration feature"
+
+Orchestrator: Decomposes → domain AUTH, type additive
+  [ROLE: Analyst]    → Intent, Domain Rules, AC, Constraints → Gate A ✅
+  [ROLE: Developer]  → Tech Spec, API, Code                 → Gate B ✅
+  [ROLE: Tester]     → Test Plan, Coverage Matrix, Tests     → Gate C ✅
+Done: spec + code + tests, all traced to atoms.
+```
 
 ## Documentation
 
@@ -58,13 +82,13 @@ Atomic Spec includes a skill for AI coding agents (Claude Code) that orchestrate
 | [Change Types](docs/change-types.md) | Parameter, Rule, Flow, Model, Boundary changes |
 | [Amendments](docs/amendments.md) | How to handle in-flight changes |
 
-## Role References
+## Agent Role References
 
-Detailed guides for each role:
+Detailed guides for each AI agent role:
 
-- [Analyst Reference](skill/references/analyst.md) — Intent, Domain Rules, AC, Constraints
-- [Developer Reference](skill/references/developer.md) — Tech Spec, API, Code, Implementation Notes
-- [Tester Reference](skill/references/tester.md) — Test Plan, Coverage Matrix, Platform Tests
+- [Analyst Agent](skill/references/analyst.md) — Intent, Domain Rules, AC, Constraints
+- [Developer Agent](skill/references/developer.md) — Tech Spec, API, Code, Implementation Notes
+- [Tester Agent](skill/references/tester.md) — Test Plan, Coverage Matrix, Platform Tests
 
 ## Meta-Specification
 
@@ -75,6 +99,7 @@ This repository eats its own dog food — the methodology itself is described us
 ```
 atomic-spec/
 ├── README.md
+├── README.ru.md
 ├── LICENSE
 ├── docs/                        # Classic documentation
 │   ├── getting-started.md

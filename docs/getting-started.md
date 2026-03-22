@@ -1,25 +1,27 @@
-# Быстрый старт
+**English** | [Русский](ru/getting-started.md)
 
-Это пошаговое руководство поможет вам создать ваш первый атом спецификации по методологии Atomic Spec.
+# Quick Start
 
-## Предварительные требования
+This step-by-step guide will help you create your first spec atom using the Atomic Spec methodology.
 
-Для работы с Atomic Spec вам понадобятся всего два инструмента:
+## Prerequisites
 
-- **Текстовый редактор** — любой, поддерживающий Markdown (VS Code, Sublime Text, vim и т.д.)
-- **Git** — для версионирования атомов и прохождения пайплайна
+To work with Atomic Spec you only need two tools:
 
-Никаких специальных фреймворков, генераторов или CLI-утилит не требуется. Методология работает на уровне файлов и соглашений.
+- **Text editor** — any editor that supports Markdown (VS Code, Sublime Text, vim, etc.)
+- **Git** — for versioning atoms and moving through the pipeline
 
-## Шаг 1. Создание структуры каталогов
+No special frameworks, generators, or CLI utilities are required. The methodology operates at the level of files and conventions.
 
-Создайте корневой каталог для спецификаций в вашем проекте:
+## Step 1. Create the Directory Structure
+
+Create a root directory for specifications in your project:
 
 ```
 mkdir -p specs/
 ```
 
-Рекомендуемая структура:
+Recommended structure:
 
 ```
 specs/
@@ -30,17 +32,17 @@ specs/
     SPEC-010.md
 ```
 
-Каждый домен получает свой подкаталог. Имя каталога соответствует ограниченному контексту (Bounded Context) вашей предметной области.
+Each domain gets its own subdirectory. The directory name corresponds to the Bounded Context of your domain.
 
-## Шаг 2. Копирование шаблона
+## Step 2. Copy the Template
 
-Скопируйте файл шаблона атома в нужный каталог:
+Copy the atom template file into the appropriate directory:
 
 ```
 cp templates/atom-template.md specs/domain-a/SPEC-001.md
 ```
 
-Или создайте файл вручную со следующей структурой:
+Or create the file manually with the following structure:
 
 ```markdown
 ---
@@ -82,111 +84,111 @@ updated: YYYY-MM-DD
 ## Decision Log
 ```
 
-## Шаг 3. Заполнение атома как Аналитик
+## Step 3. Fill in the Atom as an Analyst
 
-Роль Аналитика — первая в пайплайне. Вы заполняете следующие секции:
+The Analyst role is first in the pipeline. You fill in the following sections:
 
 ### 3.1. Frontmatter
 
-Заполните метаданные в YAML-блоке:
+Fill in the metadata in the YAML block:
 
-- `id` — уникальный идентификатор (например, `SPEC-001`)
-- `type` — тип атома (`feature`, `rule`, `constraint`, `event`, `model`)
-- `title` — краткое название на понятном бизнесу языке
-- `actors` — кто участвует в сценарии (например, `[Покупатель, Система]`)
-- `emits` / `consumes` — события, которые этот атом порождает или потребляет
-- `status: draft` — начальный статус
+- `id` — unique identifier (e.g., `SPEC-001`)
+- `type` — atom type (`feature`, `rule`, `constraint`, `event`, `model`)
+- `title` — short name in business-friendly language
+- `actors` — who participates in the scenario (e.g., `[Buyer, System]`)
+- `emits` / `consumes` — events that this atom produces or consumes
+- `status: draft` — initial status
 
-### 3.2. Intent (Намерение)
+### 3.2. Intent
 
-Опишите суть атома в 1-3 предложениях. Без технических деталей. Только бизнес-смысл.
+Describe the essence of the atom in 1-3 sentences. No technical details. Business meaning only.
 
 ```markdown
 ## Intent
 
-Покупатель может отменить заказ в течение 30 минут после оформления,
-если заказ ещё не передан в доставку. При отмене средства возвращаются
-на исходный способ оплаты.
+The buyer can cancel an order within 30 minutes of placing it,
+provided the order has not yet been handed off to delivery. Upon
+cancellation, funds are returned to the original payment method.
 ```
 
-### 3.3. Domain Rules (Доменные правила)
+### 3.3. Domain Rules
 
-Перечислите правила предметной области. Каждое правило имеет уникальный ID и описание последствий нарушения.
+List the domain rules. Each rule has a unique ID and a description of the violation consequence.
 
 ```markdown
 ## Domain Rules
 
-- **DR-001**: Отмена возможна только в статусе `placed` или `confirmed`.
-  Нарушение: система отклоняет запрос с ошибкой `ORDER_NOT_CANCELLABLE`.
-- **DR-002**: Время на отмену — 30 минут с момента `order.placed`.
-  Нарушение: система отклоняет запрос с ошибкой `CANCELLATION_WINDOW_EXPIRED`.
+- **DR-001**: Cancellation is only possible in status `placed` or `confirmed`.
+  Violation: the system rejects the request with error `ORDER_NOT_CANCELLABLE`.
+- **DR-002**: The cancellation window is 30 minutes from the `order.placed` event.
+  Violation: the system rejects the request with error `CANCELLATION_WINDOW_EXPIRED`.
 ```
 
-### 3.4. Acceptance Criteria (Критерии приёмки)
+### 3.4. Acceptance Criteria
 
-Напишите минимум один Gherkin-сценарий. Сценарии должны быть технологически нейтральными.
+Write at least one Gherkin scenario. Scenarios must be technology-neutral.
 
 ```markdown
 ## Acceptance Criteria
 
-**AC-001**: Успешная отмена заказа
-Given заказ в статусе "placed" создан 10 минут назад
-When Покупатель запрашивает отмену заказа
-Then заказ переходит в статус "cancelled"
-And средства возвращаются на исходный способ оплаты
+**AC-001**: Successful order cancellation
+Given an order in status "placed" created 10 minutes ago
+When the Buyer requests order cancellation
+Then the order transitions to status "cancelled"
+And funds are returned to the original payment method
 
-**AC-002**: Отмена после истечения окна
-Given заказ в статусе "placed" создан 40 минут назад
-When Покупатель запрашивает отмену заказа
-Then система отклоняет запрос с ошибкой "CANCELLATION_WINDOW_EXPIRED"
+**AC-002**: Cancellation after window expiration
+Given an order in status "placed" created 40 minutes ago
+When the Buyer requests order cancellation
+Then the system rejects the request with error "CANCELLATION_WINDOW_EXPIRED"
 ```
 
-### 3.5. Constraints (Ограничения)
+### 3.5. Constraints
 
-Укажите нефункциональные требования: производительность, безопасность, идемпотентность и др.
+Specify non-functional requirements: performance, security, idempotency, etc.
 
 ### 3.6. Open Questions
 
-Зафиксируйте открытые вопросы. Блокирующие вопросы должны быть закрыты до прохождения гейта.
+Record open questions. Blocking questions must be closed before passing the gate.
 
-## Шаг 4. Прохождение Gate A
+## Step 4. Passing Gate A
 
-Gate A — это контрольная точка между Аналитиком и Разработчиком. Убедитесь, что:
+Gate A is the checkpoint between the Analyst and the Developer. Make sure that:
 
-1. Intent заполнен (1-3 предложения, без технических деталей)
-2. Есть минимум одно доменное правило с ID и последствием нарушения
-3. Написан минимум один Gherkin-сценарий
-4. Акторы указаны в frontmatter и в AC
-5. События (emits/consumes) заполнены
-6. В Intent и Domain Rules нет технических решений
-7. Все блокирующие Open Questions закрыты
-8. Указан тип изменения (change type)
-9. На каждый happy-path есть хотя бы один негативный AC
+1. Intent is filled in (1-3 sentences, no technical details)
+2. There is at least one domain rule with an ID and a violation consequence
+3. At least one Gherkin scenario is written
+4. Actors are specified in the frontmatter and in the AC
+5. Events (emits/consumes) are filled in
+6. Intent and Domain Rules contain no technical decisions
+7. All blocking Open Questions are closed
+8. The change type is specified
+9. For every happy-path there is at least one negative AC
 
-Создайте PR с веткой `spec/SPEC-001` и пройдите ревью.
+Create a PR with the branch `spec/SPEC-001` and go through review.
 
-## Шаг 5. Фаза Разработчика (кратко)
+## Step 5. Developer Phase (brief)
 
-После прохождения Gate A Разработчик:
+After passing Gate A, the Developer:
 
-- Заполняет секции Tech Spec, Platform API, Implementation Notes
-- Пишет код реализации
-- Проходит Gate B
+- Fills in the Tech Spec, Platform API, and Implementation Notes sections
+- Writes the implementation code
+- Passes Gate B
 
-## Шаг 6. Фаза Тестировщика (кратко)
+## Step 6. Tester Phase (brief)
 
-После прохождения Gate B Тестировщик:
+After passing Gate B, the Tester:
 
-- Заполняет секции Test Plan, Platform Tests
-- Строит Coverage Matrix (AC -> Test Case -> DR)
-- Проверяет покрытие всех AC и DR тестами
-- Проходит Gate C
+- Fills in the Test Plan and Platform Tests sections
+- Builds the Coverage Matrix (AC -> Test Case -> DR)
+- Verifies that all AC and DR are covered by tests
+- Passes Gate C
 
-После прохождения Gate C атом считается завершённым: `status: active`, `implementation: done`, `verification: passed`.
+After passing Gate C the atom is considered complete: `status: active`, `implementation: done`, `verification: passed`.
 
-## Что дальше
+## What's Next
 
-- [Полное описание методологии](methodology.md)
-- [Анатомия атома](atom-anatomy.md)
-- [Роли и пайплайн](roles-and-pipeline.md)
-- [Валидация гейтов](gate-validation.md)
+- [Full methodology description](methodology.md)
+- [Atom anatomy](atom-anatomy.md)
+- [Roles and pipeline](roles-and-pipeline.md)
+- [Gate validation](ru/gate-validation.md)
