@@ -11,6 +11,21 @@ Atomic Spec unifies four approaches into a single methodology for working with s
 - **Use-Case-Driven** — each atom describes a specific use case with actors, actions, and expected outcomes.
 - **Requirements-Driven** — requirements are captured explicitly and traced through the entire pipeline from Intent to test coverage.
 
+## AI-Native Methodology
+
+Atomic Spec is designed to be executed by AI agents. The three roles — **Analyst**, **Developer**, **Tester** — are AI agent roles, coordinated by an **Orchestrator Agent**. The methodology works equally well with human teams, but its structure (strict contracts, gate checklists, machine-readable frontmatter) is optimized for AI-driven workflows.
+
+### File Tree as Project State
+
+The `/specs/` directory tree is the **live representation of the current project state**. It replaces backlogs, dashboards, and task trackers:
+
+- **Directory = Domain** (bounded context)
+- **File in root = Active requirement** (ready for development)
+- **File in `_draft/` = Work in progress** (has open questions)
+- **File in `_deprecated/` = Historical record** (replaced by a newer atom)
+
+The AI agent **must read the file tree** before starting any work. Without this context, it cannot determine whether to create a new atom or modify an existing one. The tree is the agent's primary source of project awareness.
+
 ## Core Idea: One File = One Unit of Knowledge
 
 An atom is the minimal indivisible unit of specification. A single Markdown file contains everything you need to know about a particular feature, rule, or constraint:
